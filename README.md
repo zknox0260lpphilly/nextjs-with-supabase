@@ -27,7 +27,13 @@ Steps 1 to 5 are what we did in this project. Step 6 assumes the repo is connect
 
 ## 4. What will you need to add to turn this into your team's app? Use your product manager's feature list.
 
-_(To be filled in.)_
+**Ekip** is a support platform for the Haitian community. It connects people who need resources with individuals, schools, organizations and volunteers who can help.
+
+The features to add are:
+
+1. **Education**
+2. **Job**
+3. **Multilingualism**
 
 ## 5. A diagram: boxes for the user, GitHub, Vercel and Supabase, with arrows showing what connects to what.
 
