@@ -22,6 +22,10 @@ The Supabase dashboard (Authentication, Users) showing the accounts that sign-up
 
 ![Supabase Authentication users list](docs/screenshots/supabase-auth-users.png)
 
+After signing in, the app's protected page shows the signed-in user's details, which come from Supabase Auth. The header also shows the new "Launchpad Student" name:
+
+![Signed-in protected page](docs/screenshots/signed-in-protected-page.png)
+
 ## 3. How does a change get from Claude Code to the live site? List the steps.
 
 1. Claude Code edits the files on a working branch (for example `claude/nice-keller-k5sw98`).
