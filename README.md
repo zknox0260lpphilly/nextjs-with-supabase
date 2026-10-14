@@ -14,6 +14,14 @@ What the code stores right now:
 
 I can't see inside the live Supabase project from the code, so the exact current contents (how many users, whether a `notes` table exists) need to be checked in the Supabase dashboard.
 
+The live site's sign-up page, where people create these accounts:
+
+![Sign-up page on the live site](docs/screenshots/live-sign-up-page.png)
+
+The Supabase dashboard (Authentication, Users) showing the accounts that sign-up created. Both use the Email provider, and one is still "Waiting for verification":
+
+![Supabase Authentication users list](docs/screenshots/supabase-auth-users.png)
+
 ## 3. How does a change get from Claude Code to the live site? List the steps.
 
 1. Claude Code edits the files on a working branch (for example `claude/nice-keller-k5sw98`).
@@ -23,7 +31,17 @@ I can't see inside the live Supabase project from the code, so the exact current
 5. The pull request is reviewed and merged into `main`.
 6. Vercel, connected to the GitHub repo, sees the new commit on `main`, builds the app and publishes it to the live site. The Supabase environment variables are set in the Vercel project.
 
-Steps 1 to 5 are what we did in this project. Step 6 assumes the repo is connected to a Vercel project. The repo has no `vercel.json` or `.vercel` folder, so confirm the connection in the Vercel dashboard.
+Steps 1 to 5 are what we did in this project. Step 6 is confirmed by the Vercel dashboard: the repo is connected to a Vercel project, and every push to `main` creates a Production deployment (each pull request branch also gets a Preview deployment). The latest Production deployment is the "Rename site header" commit `892d49c` from `main`.
+
+![Vercel deployments list](docs/screenshots/vercel-deployments.png)
+
+The result on the live site. Before the rename, the header said "Next.js Supabase Starter":
+
+![Live home page before the change](docs/screenshots/home-page-before.png)
+
+After the change was merged to `main` and deployed, the header says "Launchpad Student":
+
+![Live home page after the change](docs/screenshots/home-page-after.png)
 
 ## 4. What will you need to add to turn this into your team's app? Use your product manager's feature list.
 
