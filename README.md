@@ -31,9 +31,9 @@ Steps 1 to 5 are what we did in this project. Step 6 assumes the repo is connect
 
 The features to add are:
 
-1. **Education**
-2. **Job**
-3. **Multilingualism**
+1. **Education** - Access to educational resources, information and opportunities. For example, a school that needs computers can post that need, and an individual or organization with computers can find the post, contact the school and arrange the donation. Help types include school supplies, tutoring and scholarships.
+2. **Job** - Opportunities for community members, including volunteering, so people can offer their time and skills and find ways to help.
+3. **Multilingualism** - The app is available in Haitian Creole, French, Spanish and English to reduce language barriers. Users choose their language, say where they are located, and select the type of help they need or want to offer.
 
 ## 5. A diagram: boxes for the user, GitHub, Vercel and Supabase, with arrows showing what connects to what.
 
