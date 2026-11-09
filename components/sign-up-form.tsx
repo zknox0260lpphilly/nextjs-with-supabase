@@ -15,14 +15,47 @@ import { Label } from "@/components/ui/label";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import { USER_TYPES, type UserType } from "@/lib/i18n/constants";
+
+export type SignUpLabels = {
+  title: string;
+  subtitle: string;
+  email: string;
+  password: string;
+  repeatPassword: string;
+  iAm: string;
+  userTypes: Record<UserType, string>;
+  ageConfirm: string;
+  mismatch: string;
+  submit: string;
+  submitting: string;
+  haveAccount: string;
+  signIn: string;
+  error: string;
+};
+
+// What the visitor already told us on the welcome screens. It is saved on
+// their profile (the database creates the profile when the account is made).
+export type SignUpDefaults = {
+  language: string;
+  country: string;
+  region: string;
+  city: string;
+};
 
 export function SignUpForm({
+  labels,
+  defaults,
   className,
   ...props
-}: React.ComponentPropsWithoutRef<"div">) {
+}: {
+  labels: SignUpLabels;
+  defaults: SignUpDefaults;
+} & React.ComponentPropsWithoutRef<"div">) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [repeatPassword, setRepeatPassword] = useState("");
+  const [userType, setUserType] = useState<UserType>("community_member");
   const [error, setError] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
@@ -34,7 +67,7 @@ export function SignUpForm({
     setError(null);
 
     if (password !== repeatPassword) {
-      setError("Passwords do not match");
+      setError(labels.mismatch);
       setIsLoading(false);
       return;
     }
@@ -44,13 +77,20 @@ export function SignUpForm({
         email,
         password,
         options: {
-          emailRedirectTo: `${window.location.origin}/protected`,
+          emailRedirectTo: `${window.location.origin}/profile`,
+          data: {
+            language: defaults.language,
+            country: defaults.country,
+            department: defaults.region,
+            city: defaults.city,
+            user_type: userType,
+          },
         },
       });
       if (error) throw error;
       router.push("/auth/sign-up-success");
-    } catch (error: unknown) {
-      setError(error instanceof Error ? error.message : "An error occurred");
+    } catch {
+      setError(labels.error);
     } finally {
       setIsLoading(false);
     }
@@ -60,56 +100,74 @@ export function SignUpForm({
     <div className={cn("flex flex-col gap-6", className)} {...props}>
       <Card>
         <CardHeader>
-          <CardTitle className="text-2xl">Sign up</CardTitle>
-          <CardDescription>Create a new account</CardDescription>
+          <CardTitle className="text-2xl">{labels.title}</CardTitle>
+          <CardDescription>{labels.subtitle}</CardDescription>
         </CardHeader>
         <CardContent>
           <form onSubmit={handleSignUp}>
             <div className="flex flex-col gap-6">
               <div className="grid gap-2">
-                <Label htmlFor="email">Email</Label>
+                <Label htmlFor="email">{labels.email}</Label>
                 <Input
                   id="email"
                   type="email"
-                  placeholder="m@example.com"
+                  autoComplete="email"
                   required
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                 />
               </div>
               <div className="grid gap-2">
-                <div className="flex items-center">
-                  <Label htmlFor="password">Password</Label>
-                </div>
+                <Label htmlFor="user-type">{labels.iAm}</Label>
+                <select
+                  id="user-type"
+                  value={userType}
+                  onChange={(e) => setUserType(e.target.value as UserType)}
+                  className="flex h-9 w-full rounded-md border border-input bg-background px-3 py-1 text-base shadow-sm focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring md:text-sm"
+                >
+                  {USER_TYPES.map((value) => (
+                    <option key={value} value={value}>
+                      {labels.userTypes[value]}
+                    </option>
+                  ))}
+                </select>
+              </div>
+              <div className="grid gap-2">
+                <Label htmlFor="password">{labels.password}</Label>
                 <Input
                   id="password"
                   type="password"
+                  autoComplete="new-password"
                   required
+                  minLength={6}
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                 />
               </div>
               <div className="grid gap-2">
-                <div className="flex items-center">
-                  <Label htmlFor="repeat-password">Repeat Password</Label>
-                </div>
+                <Label htmlFor="repeat-password">{labels.repeatPassword}</Label>
                 <Input
                   id="repeat-password"
                   type="password"
+                  autoComplete="new-password"
                   required
                   value={repeatPassword}
                   onChange={(e) => setRepeatPassword(e.target.value)}
                 />
               </div>
-              {error && <p className="text-sm text-red-500">{error}</p>}
+              <label className="flex items-center gap-2 text-sm">
+                <input type="checkbox" required className="size-4" />
+                {labels.ageConfirm}
+              </label>
+              {error && <p className="text-sm text-destructive">{error}</p>}
               <Button type="submit" className="w-full" disabled={isLoading}>
-                {isLoading ? "Creating an account..." : "Sign up"}
+                {isLoading ? labels.submitting : labels.submit}
               </Button>
             </div>
             <div className="mt-4 text-center text-sm">
-              Already have an account?{" "}
+              {labels.haveAccount}{" "}
               <Link href="/auth/login" className="underline underline-offset-4">
-                Login
+                {labels.signIn}
               </Link>
             </div>
           </form>

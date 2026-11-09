@@ -1,11 +1,34 @@
+import { Suspense } from "react";
+import { AuthFrame } from "@/components/ekip/auth-frame";
 import { LoginForm } from "@/components/login-form";
+import { getT } from "@/lib/i18n/server";
+
+async function Login() {
+  const { lang, t } = await getT();
+  return (
+    <AuthFrame lang={lang}>
+      <LoginForm
+        labels={{
+          title: t("loginTitle"),
+          subtitle: t("loginSub"),
+          email: t("email"),
+          password: t("password"),
+          forgot: t("forgotPassword"),
+          submit: t("signIn"),
+          submitting: t("signingIn"),
+          noAccount: t("noAccount"),
+          signUp: t("createAccount"),
+          error: t("errorGeneric"),
+        }}
+      />
+    </AuthFrame>
+  );
+}
 
 export default function Page() {
   return (
-    <div className="flex min-h-svh w-full items-center justify-center p-6 md:p-10">
-      <div className="w-full max-w-sm">
-        <LoginForm />
-      </div>
-    </div>
+    <Suspense>
+      <Login />
+    </Suspense>
   );
 }
