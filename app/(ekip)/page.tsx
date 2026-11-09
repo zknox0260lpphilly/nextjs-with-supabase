@@ -22,9 +22,12 @@ import { listRequests, listResources } from "@/lib/ekip/queries";
 async function Home() {
   const { lang, t } = await getT();
   const location = await getLocation();
-  const area = location
-    ? { country: location.country, region: location.region || undefined }
-    : undefined;
+  // Most requests come from Haiti. Someone in Haiti sees their own area;
+  // someone abroad sees Haiti, since that is where they can send help.
+  const inHaiti = location?.country === "HT";
+  const area = inHaiti
+    ? { country: "HT", region: location?.region || undefined }
+    : { country: "HT" };
 
   const [requests, resources] = await Promise.all([
     listRequests({ area, limit: 3 }),
@@ -43,11 +46,11 @@ async function Home() {
 
   return (
     <div className="grid gap-10">
-      <section className="rounded-2xl bg-primary p-6 text-primary-foreground sm:p-8">
+      <section className="rounded-2xl bg-navy p-6 text-navy-foreground sm:p-8">
         {place ? (
           <Link
             href="/welcome/location"
-            className="mb-4 inline-flex items-center gap-1.5 rounded-full bg-primary-foreground/15 px-3 py-1 text-xs hover:bg-primary-foreground/25"
+            className="mb-4 inline-flex items-center gap-1.5 rounded-full bg-white/15 px-3 py-1 text-xs hover:bg-white/25"
           >
             <MapPin className="size-3.5" aria-hidden />
             {place}
@@ -57,9 +60,12 @@ async function Home() {
         <h1 className="text-3xl font-bold leading-tight tracking-tight sm:text-4xl">
           {t("heroTitle")}
         </h1>
-        <p className="mt-3 max-w-xl text-primary-foreground/85">
-          {t("heroSub")}
-        </p>
+        <p className="mt-3 max-w-xl text-white/85">{t("heroSub")}</p>
+        {location && !inHaiti ? (
+          <p className="mt-3 max-w-xl rounded-lg bg-white/10 px-4 py-3 text-sm text-white">
+            {t("abroadNote")}
+          </p>
+        ) : null}
 
         <div className="mt-6 grid gap-3 sm:grid-cols-2">
           <Link
@@ -79,7 +85,7 @@ async function Home() {
             href="/post?type=offer"
             className="group rounded-xl bg-background p-4 text-foreground shadow-sm transition hover:shadow-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
           >
-            <HeartHandshake className="size-6 text-secondary-foreground" aria-hidden />
+            <HeartHandshake className="size-6 text-navy dark:text-foreground" aria-hidden />
             <span className="mt-2 flex items-center justify-between text-lg font-semibold">
               {t("offerHelp")}
               <ArrowRight className="size-5 transition group-hover:translate-x-1" aria-hidden />
@@ -117,7 +123,7 @@ async function Home() {
             </Link>
           }
         >
-          {t("nearYou")}
+          {inHaiti ? t("nearYou") : t("requestsInHaiti")}
         </SectionTitle>
         {requests.error ? (
           <Notice>{t("dbNotReady")}</Notice>

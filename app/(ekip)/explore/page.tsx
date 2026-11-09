@@ -10,6 +10,7 @@ import type { TranslationKey } from "@/lib/i18n/translations";
 import { listOffers, listRequests } from "@/lib/ekip/queries";
 
 type Params = { type?: string; cat?: string; area?: string };
+type AreaMode = "mine" | "haiti" | "all";
 
 function href(params: Params): string {
   const query = new URLSearchParams();
@@ -54,19 +55,31 @@ async function Explore({ searchParams }: { searchParams: Promise<Params> }) {
 
   const type = raw.type === "offers" ? "offers" : "needs";
   const cat = isCategory(raw.cat) ? raw.cat : undefined;
-  // "My area" is the default whenever the visitor told us where they live.
-  const useArea = raw.area !== "all" && Boolean(location);
+  // Most requests come from Haiti. Someone in Haiti starts with their own
+  // area; someone abroad starts with Haiti, where they can send help.
+  const inHaiti = location?.country === "HT";
+  const fallbackMode: AreaMode = !location ? "all" : inHaiti ? "mine" : "haiti";
+  const requested = ["mine", "haiti", "all"].includes(raw.area ?? "")
+    ? (raw.area as AreaMode)
+    : fallbackMode;
+  const mode: AreaMode = location || requested === "all" ? requested : "all";
   const area =
-    useArea && location
+    mode === "mine" && location
       ? { country: location.country, region: location.region || undefined }
-      : undefined;
+      : mode === "haiti"
+        ? { country: "HT" }
+        : undefined;
 
   const result =
     type === "offers"
       ? await listOffers({ cat, area })
       : await listRequests({ cat, area });
 
-  const base: Params = { type: type === "offers" ? "offers" : undefined, cat, area: raw.area };
+  const base: Params = {
+    type: type === "offers" ? "offers" : undefined,
+    cat,
+    area: raw.area,
+  };
 
   return (
     <div>
@@ -94,11 +107,16 @@ async function Explore({ searchParams }: { searchParams: Promise<Params> }) {
         </div>
 
         {location ? (
-          <div className="flex gap-2">
-            <Chip to={href({ ...base, area: undefined })} active={useArea}>
-              {t("myArea")}
+          <div className="flex flex-wrap gap-2">
+            {!inHaiti ? (
+              <Chip to={href({ ...base, area: "haiti" })} active={mode === "haiti"}>
+                {t("inHaiti")}
+              </Chip>
+            ) : null}
+            <Chip to={href({ ...base, area: "mine" })} active={mode === "mine"}>
+              {inHaiti ? t("myArea") : t("myCountry")}
             </Chip>
-            <Chip to={href({ ...base, area: "all" })} active={!useArea}>
+            <Chip to={href({ ...base, area: "all" })} active={mode === "all"}>
               {t("everywhere")}
             </Chip>
           </div>

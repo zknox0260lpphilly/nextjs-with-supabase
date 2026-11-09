@@ -5,10 +5,11 @@ import { NextResponse, type NextRequest } from "next/server";
 export async function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
-  // First visit: ask for language, then location, before anything else.
-  if (!pathname.startsWith("/welcome")) {
+  // First visit: welcome screen, then language, then country, before anything
+  // else. Sign-in pages are open so returning members can sign in right away.
+  if (!pathname.startsWith("/welcome") && !pathname.startsWith("/auth")) {
     const needs = !request.cookies.get(LANG_COOKIE)?.value
-      ? "/welcome/language"
+      ? "/welcome"
       : !request.cookies.get(LOC_COOKIE)?.value
         ? "/welcome/location"
         : null;
