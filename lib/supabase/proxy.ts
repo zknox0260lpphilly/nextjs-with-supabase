@@ -47,12 +47,15 @@ export async function updateSession(request: NextRequest) {
   const { data } = await supabase.auth.getClaims();
   const user = data?.claims;
 
-  if (
-    request.nextUrl.pathname !== "/" &&
-    !user &&
-    !request.nextUrl.pathname.startsWith("/login") &&
-    !request.nextUrl.pathname.startsWith("/auth")
-  ) {
+  // Pages anyone can open without an account. The rest (messages, reports
+  // page) send signed-out visitors to the login page.
+  const publicPaths = ["/welcome", "/explore", "/requests", "/post", "/profile", "/login", "/auth"];
+  const path = request.nextUrl.pathname;
+  const isPublic =
+    path === "/" ||
+    publicPaths.some((p) => path === p || path.startsWith(`${p}/`));
+
+  if (!user && !isPublic) {
     // no user, potentially respond by redirecting the user to the login page
     const url = request.nextUrl.clone();
     url.pathname = "/auth/login";

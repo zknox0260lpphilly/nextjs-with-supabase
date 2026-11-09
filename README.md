@@ -10,7 +10,7 @@ In a Supabase project (Postgres database plus Supabase Auth). The app finds it t
 
 What the code stores right now:
 - **User accounts.** Sign-up, login, logout and password reset all go through Supabase Auth, so emails and password hashes live in Supabase's auth users table.
-- **No app tables yet.** The repo has no database migrations and the app code reads and writes no tables. The only table reference is a `notes` table in the optional tutorial component (`components/tutorial/fetch-data-steps.tsx`), which only exists if someone created it in Supabase.
+- **App tables (after you run the SQL).** The Ekip pages read and write the tables in `docs/database/schema.sql`: profiles, requests, offers, matches, messages, photos, notifications and reports. Until that SQL is run in Supabase, the pages show a "database is not ready" message instead of data. The only table the starter code mentions is a `notes` table in the old tutorial, which has been removed.
 
 I can't see inside the live Supabase project from the code, so the exact current contents (how many users, whether a `notes` table exists) need to be checked in the Supabase dashboard.
 
