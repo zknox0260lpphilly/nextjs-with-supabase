@@ -55,7 +55,7 @@ export function LocationFields({
 
       {country ? (
         <Field
-          label={`${regionLabel}${options ? "" : ` (${labels.optional})`}`}
+          label={`${regionLabel} (${labels.optional})`}
           htmlFor="region"
         >
           {options ? (
@@ -63,14 +63,11 @@ export function LocationFields({
               key={country}
               id="region"
               name="region"
-              required
               defaultValue={
                 initial?.country === country ? initial.region : ""
               }
             >
-              <option value="" disabled>
-                {labels.select}
-              </option>
+              <option value="">{labels.select}</option>
               {options.map((o) => (
                 <option key={o.value} value={o.value}>
                   {o.label}

@@ -1,7 +1,26 @@
 import type { Lang } from "@/lib/i18n/constants";
 
-// Country codes shown in the location step. "XX" means another country.
-export const COUNTRIES = ["HT", "US", "CA", "FR", "DO", "BR", "CL", "XX"] as const;
+// Country codes shown in the country step, in the order of the design.
+// "XX" means another country. People outside Haiti pick where they are
+// and can still help Haiti.
+export const COUNTRIES = [
+  "HT", "US", "CA", "FR", "GB", "DE", "BR", "IN", "JM", "DO", "CL", "XX",
+] as const;
+
+export const COUNTRY_FLAGS: Record<CountryCode, string> = {
+  HT: "🇭🇹",
+  US: "🇺🇸",
+  CA: "🇨🇦",
+  FR: "🇫🇷",
+  GB: "🇬🇧",
+  DE: "🇩🇪",
+  BR: "🇧🇷",
+  IN: "🇮🇳",
+  JM: "🇯🇲",
+  DO: "🇩🇴",
+  CL: "🇨🇱",
+  XX: "🌐",
+};
 export type CountryCode = (typeof COUNTRIES)[number];
 
 export function isCountry(value: unknown): value is CountryCode {

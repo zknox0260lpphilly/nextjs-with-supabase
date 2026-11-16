@@ -52,7 +52,8 @@ export function LoginForm({
         password,
       });
       if (error) throw error;
-      router.push("/");
+      // Restores the member's saved language and country, then opens Home.
+      router.push("/auth/continue");
       router.refresh();
     } catch {
       setError(labels.error);
