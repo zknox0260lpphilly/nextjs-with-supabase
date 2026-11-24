@@ -18,7 +18,15 @@ async function Forgot() {
           doneBody: t("linkSentSub"),
           haveAccount: t("haveAccount"),
           signIn: t("signIn"),
-          error: t("errorGeneric"),
+          errors: {
+            generic: t("errorGeneric"),
+            badLogin: t("errBadLogin"),
+            notConfirmed: t("errNotConfirmed"),
+            alreadyRegistered: t("errAlreadyRegistered"),
+            samePassword: t("errSamePassword"),
+            weakPassword: t("errWeakPassword"),
+            linkExpired: t("errLinkExpired"),
+          },
         }}
       />
     </AuthFrame>

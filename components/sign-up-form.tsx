@@ -1,6 +1,7 @@
 "use client";
 
 import { cn } from "@/lib/utils";
+import { authErrorMessage, type AuthErrorLabels } from "@/lib/ekip/auth-errors";
 import { createClient } from "@/lib/supabase/client";
 import { Button } from "@/components/ui/button";
 import {
@@ -31,7 +32,7 @@ export type SignUpLabels = {
   submitting: string;
   haveAccount: string;
   signIn: string;
-  error: string;
+  errors: AuthErrorLabels;
 };
 
 // What the visitor already told us on the welcome screens. It is saved on
@@ -89,8 +90,8 @@ export function SignUpForm({
       });
       if (error) throw error;
       router.push("/auth/sign-up-success");
-    } catch {
-      setError(labels.error);
+    } catch (error: unknown) {
+      setError(authErrorMessage(error, labels.errors).message);
     } finally {
       setIsLoading(false);
     }

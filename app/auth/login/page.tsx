@@ -18,7 +18,15 @@ async function Login() {
           submitting: t("signingIn"),
           noAccount: t("noAccount"),
           signUp: t("createAccount"),
-          error: t("errorGeneric"),
+          errors: {
+            generic: t("errorGeneric"),
+            badLogin: t("errBadLogin"),
+            notConfirmed: t("errNotConfirmed"),
+            alreadyRegistered: t("errAlreadyRegistered"),
+            samePassword: t("errSamePassword"),
+            weakPassword: t("errWeakPassword"),
+            linkExpired: t("errLinkExpired"),
+          },
         }}
       />
     </AuthFrame>

@@ -1,6 +1,7 @@
 "use client";
 
 import { cn } from "@/lib/utils";
+import { authErrorMessage, type AuthErrorLabels } from "@/lib/ekip/auth-errors";
 import { createClient } from "@/lib/supabase/client";
 import { Button } from "@/components/ui/button";
 import {
@@ -26,7 +27,7 @@ export type LoginLabels = {
   submitting: string;
   noAccount: string;
   signUp: string;
-  error: string;
+  errors: AuthErrorLabels;
 };
 
 export function LoginForm({
@@ -55,8 +56,8 @@ export function LoginForm({
       // Restores the member's saved language and country, then opens Home.
       router.push("/auth/continue");
       router.refresh();
-    } catch {
-      setError(labels.error);
+    } catch (error: unknown) {
+      setError(authErrorMessage(error, labels.errors).message);
     } finally {
       setIsLoading(false);
     }
