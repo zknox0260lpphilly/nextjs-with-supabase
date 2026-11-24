@@ -199,6 +199,16 @@ const en = {
   markClosed: "Close",
   notTeam: "This page is for the Ekip team.",
   reportedItem: "Reported",
+  notificationsTitle: "Notifications",
+  noNotifications: "No notifications yet.",
+  newRequestBadge: "New request",
+  markAllRead: "Mark all as read",
+  myPostsTitle: "My posts",
+  myRequests: "My requests",
+  myOffers: "My offers",
+  noMyRequests: "You have not posted a request yet.",
+  noMyOffers: "You have not posted an offer yet.",
+  openChat: "Open chat",
 } as const;
 
 export type TranslationKey = keyof typeof en;
@@ -389,6 +399,16 @@ const ht: Dict = {
   markClosed: "Fèmen",
   notTeam: "Paj sa a se pou ekip Ekip la.",
   reportedItem: "Sa yo siyale",
+  notificationsTitle: "Notifikasyon",
+  noNotifications: "Poko gen notifikasyon.",
+  newRequestBadge: "Nouvo demann",
+  markAllRead: "Make tout kòm li",
+  myPostsTitle: "Piblikasyon mwen yo",
+  myRequests: "Demann mwen yo",
+  myOffers: "Ofri mwen yo",
+  noMyRequests: "Ou poko pibliye okenn demann.",
+  noMyOffers: "Ou poko pibliye okenn ofri.",
+  openChat: "Louvri chat la",
 };
 
 const fr: Dict = {
@@ -576,6 +596,16 @@ const fr: Dict = {
   markClosed: "Clore",
   notTeam: "Cette page est réservée à l'équipe Ekip.",
   reportedItem: "Signalé",
+  notificationsTitle: "Notifications",
+  noNotifications: "Aucune notification pour l'instant.",
+  newRequestBadge: "Nouvelle demande",
+  markAllRead: "Tout marquer comme lu",
+  myPostsTitle: "Mes publications",
+  myRequests: "Mes demandes",
+  myOffers: "Mes offres",
+  noMyRequests: "Vous n'avez pas encore publié de demande.",
+  noMyOffers: "Vous n'avez pas encore publié d'offre.",
+  openChat: "Ouvrir la discussion",
 };
 
 const es: Dict = {
@@ -763,6 +793,16 @@ const es: Dict = {
   markClosed: "Cerrar",
   notTeam: "Esta página es para el equipo de Ekip.",
   reportedItem: "Denunciado",
+  notificationsTitle: "Notificaciones",
+  noNotifications: "Aún no hay notificaciones.",
+  newRequestBadge: "Nueva solicitud",
+  markAllRead: "Marcar todo como leído",
+  myPostsTitle: "Mis publicaciones",
+  myRequests: "Mis solicitudes",
+  myOffers: "Mis ofertas",
+  noMyRequests: "Aún no has publicado ninguna solicitud.",
+  noMyOffers: "Aún no has publicado ninguna oferta.",
+  openChat: "Abrir el chat",
 };
 
 export const translations: Record<Lang, Dict> = { en, ht, fr, es };

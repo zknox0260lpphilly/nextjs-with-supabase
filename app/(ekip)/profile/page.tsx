@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { Suspense } from "react";
-import { BadgeCheck, ShieldCheck } from "lucide-react";
+import { BadgeCheck, Bell, ClipboardList, ShieldCheck } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   Field,
@@ -174,15 +174,29 @@ async function Profile({
       </form>
 
       <div className="flex flex-wrap items-center gap-3 border-t pt-6">
-        <SignOutButton label={t("signOut")} />
+        <Button asChild variant="outline">
+          <Link href="/my">
+            <ClipboardList aria-hidden />
+            {t("myPostsTitle")}
+          </Link>
+        </Button>
         {team ? (
-          <Button asChild variant="ghost">
-            <Link href="/moderation">
-              <ShieldCheck aria-hidden />
-              {t("modTitle")}
-            </Link>
-          </Button>
+          <>
+            <Button asChild variant="outline">
+              <Link href="/notifications">
+                <Bell aria-hidden />
+                {t("notificationsTitle")}
+              </Link>
+            </Button>
+            <Button asChild variant="outline">
+              <Link href="/moderation">
+                <ShieldCheck aria-hidden />
+                {t("modTitle")}
+              </Link>
+            </Button>
+          </>
         ) : null}
+        <SignOutButton label={t("signOut")} />
       </div>
     </div>
   );

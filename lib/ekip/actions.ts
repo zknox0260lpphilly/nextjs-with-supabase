@@ -284,3 +284,17 @@ export async function updateProfile(formData: FormData) {
   revalidatePath("/", "layout");
   redirect("/profile?saved=1");
 }
+
+// ---------------------------------------------------------------------
+// Team notifications
+// ---------------------------------------------------------------------
+
+export async function markNotificationsRead() {
+  const { supabase } = await requireUser();
+  await supabase
+    .from("notifications")
+    .update({ read_at: new Date().toISOString() })
+    .is("read_at", null);
+  revalidatePath("/", "layout");
+  redirect("/notifications");
+}

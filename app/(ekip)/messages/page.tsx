@@ -40,7 +40,7 @@ async function Messages() {
                 ? m.offers.profiles.display_name
                 : m.requests.profiles.display_name;
             return (
-              <li key={m.id}>
+              <li key={m.id} className="min-w-0">
                 <Link href={`/messages/${m.id}`}>
                   <Card className="flex items-center gap-3 p-4 transition-colors hover:bg-accent">
                     <div className="min-w-0 flex-1">
