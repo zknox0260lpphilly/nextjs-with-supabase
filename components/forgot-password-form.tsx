@@ -1,6 +1,7 @@
 "use client";
 
 import { cn } from "@/lib/utils";
+import { authErrorMessage, type AuthErrorLabels } from "@/lib/ekip/auth-errors";
 import { createClient } from "@/lib/supabase/client";
 import { Button } from "@/components/ui/button";
 import {
@@ -25,7 +26,7 @@ export type ForgotLabels = {
   doneBody: string;
   haveAccount: string;
   signIn: string;
-  error: string;
+  errors: AuthErrorLabels;
 };
 
 export function ForgotPasswordForm({
@@ -51,8 +52,8 @@ export function ForgotPasswordForm({
       });
       if (error) throw error;
       setSuccess(true);
-    } catch {
-      setError(labels.error);
+    } catch (error: unknown) {
+      setError(authErrorMessage(error, labels.errors).message);
     } finally {
       setIsLoading(false);
     }

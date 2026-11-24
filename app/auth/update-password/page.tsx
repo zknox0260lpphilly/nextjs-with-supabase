@@ -13,7 +13,16 @@ async function UpdatePassword() {
           newPassword: t("newPassword"),
           submit: t("savePassword"),
           submitting: t("saving"),
-          error: t("errorGeneric"),
+          newLink: t("requestNewLink"),
+          errors: {
+            generic: t("errorGeneric"),
+            badLogin: t("errBadLogin"),
+            notConfirmed: t("errNotConfirmed"),
+            alreadyRegistered: t("errAlreadyRegistered"),
+            samePassword: t("errSamePassword"),
+            weakPassword: t("errWeakPassword"),
+            linkExpired: t("errLinkExpired"),
+          },
         }}
       />
     </AuthFrame>

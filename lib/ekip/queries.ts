@@ -313,3 +313,113 @@ export async function listOpenReports(): Promise<ReportRow[]> {
     return [];
   }
 }
+
+// ---------------------------------------------------------------------
+// Team notifications (a new request came in) and "my posts"
+// ---------------------------------------------------------------------
+
+export type NotificationRow = {
+  id: string;
+  read_at: string | null;
+  created_at: string;
+  requests: {
+    id: string;
+    title: string;
+    quantity: number;
+    categories: { slug: string };
+    profiles: Poster;
+  } | null;
+};
+
+export async function listNotifications(): Promise<{
+  rows: NotificationRow[];
+  error: boolean;
+}> {
+  if (!hasEnvVars) return { rows: [], error: true };
+  try {
+    const supabase = await createClient();
+    const { data, error } = await supabase
+      .from("notifications")
+      .select(
+        `id,read_at,created_at,
+         requests(id,title,quantity,categories(slug),
+           profiles(display_name,user_type,organization_name,country,department,city,verified_at))`,
+      )
+      .order("created_at", { ascending: false })
+      .limit(50);
+    if (error) return { rows: [], error: true };
+    return { rows: (data ?? []) as unknown as NotificationRow[], error: false };
+  } catch {
+    return { rows: [], error: true };
+  }
+}
+
+// How many unread notifications the signed-in person has (10 means "10 or more").
+export async function countUnreadNotifications(): Promise<number> {
+  if (!hasEnvVars) return 0;
+  try {
+    const supabase = await createClient();
+    const { data } = await supabase
+      .from("notifications")
+      .select("id")
+      .is("read_at", null)
+      .limit(10);
+    return data?.length ?? 0;
+  } catch {
+    return 0;
+  }
+}
+
+export type MyPost = {
+  id: string;
+  title: string;
+  quantity: number;
+  status: string;
+  created_at: string;
+  categories: { slug: string };
+  matchId: string | null;
+};
+
+type MyPostRaw = Omit<MyPost, "matchId"> & {
+  matches: { id: string } | { id: string }[] | null;
+};
+
+function withMatch(rows: MyPostRaw[]): MyPost[] {
+  return rows.map(({ matches, ...rest }) => {
+    const match = Array.isArray(matches) ? matches[0] : matches;
+    return { ...rest, matchId: match?.id ?? null };
+  });
+}
+
+export async function listMyPosts(userId: string): Promise<{
+  requests: MyPost[];
+  offers: MyPost[];
+  error: boolean;
+}> {
+  const empty = { requests: [], offers: [], error: true };
+  if (!hasEnvVars) return empty;
+  try {
+    const supabase = await createClient();
+    const columns = "id,title,quantity,status,created_at,categories(slug),matches(id)";
+    const [requests, offers] = await Promise.all([
+      supabase
+        .from("requests")
+        .select(columns)
+        .eq("requester_id", userId)
+        .order("created_at", { ascending: false }),
+      supabase
+        .from("offers")
+        .select(columns)
+        .eq("donor_id", userId)
+        .order("created_at", { ascending: false }),
+    ]);
+    if (requests.error || offers.error) return empty;
+    return {
+      requests: withMatch((requests.data ?? []) as unknown as MyPostRaw[]),
+      offers: withMatch((offers.data ?? []) as unknown as MyPostRaw[]),
+      error: false,
+    };
+  } catch {
+    return empty;
+  }
+}

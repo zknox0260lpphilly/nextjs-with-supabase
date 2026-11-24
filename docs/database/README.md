@@ -155,7 +155,7 @@ The database does steps 2 and 4 by itself with triggers, so the app never sets a
 
 - The job, course and training section is Stretch in the PRD, so it has no tables yet.
 - A match is one request to one offer. Splitting a large request across several donors would need a change.
-- Sending an email or text when the team is notified is not set up. The notification row is created, and a Supabase Edge Function could send the message later.
+- The team sees each new request in the site under **Notifications** (a bell icon in the header, and a button on the Profile page). Sending an email or text as well is not set up. A Supabase Edge Function could send it later.
 - Which languages to offer is an open question in the PRD. The schema allows Creole, French, Spanish and English, and adding another means editing two `check` lines.
 
 ## How it was tested

@@ -191,6 +191,13 @@ const en = {
   savePassword: "Save new password",
   saving: "Saving…",
   authErrorTitle: "Sorry, something went wrong.",
+  errBadLogin: "Wrong email or password.",
+  errNotConfirmed: "Please confirm your email first. Check your inbox for the link.",
+  errAlreadyRegistered: "This email already has an account. Try signing in.",
+  errSamePassword: "Your new password must be different from your old one.",
+  errWeakPassword: "That password is too weak. Use at least 6 characters.",
+  errLinkExpired: "This link has expired or was already used. Please request a new one.",
+  requestNewLink: "Request a new link",
 
   // moderation
   modTitle: "Reports",
@@ -199,6 +206,16 @@ const en = {
   markClosed: "Close",
   notTeam: "This page is for the Ekip team.",
   reportedItem: "Reported",
+  notificationsTitle: "Notifications",
+  noNotifications: "No notifications yet.",
+  newRequestBadge: "New request",
+  markAllRead: "Mark all as read",
+  myPostsTitle: "My posts",
+  myRequests: "My requests",
+  myOffers: "My offers",
+  noMyRequests: "You have not posted a request yet.",
+  noMyOffers: "You have not posted an offer yet.",
+  openChat: "Open chat",
 } as const;
 
 export type TranslationKey = keyof typeof en;
@@ -382,6 +399,13 @@ const ht: Dict = {
   savePassword: "Anrejistre nouvo modpas la",
   saving: "Y ap anrejistre…",
   authErrorTitle: "Dezole, gen yon bagay ki pa mache.",
+  errBadLogin: "Imèl oswa modpas la pa bon.",
+  errNotConfirmed: "Tanpri konfime imèl ou anvan. Tcheke bwat resepsyon ou pou lyen an.",
+  errAlreadyRegistered: "Imèl sa a gen yon kont deja. Eseye konekte.",
+  errSamePassword: "Nouvo modpas ou a dwe diferan de ansyen an.",
+  errWeakPassword: "Modpas sa a twò fèb. Itilize omwen 6 karaktè.",
+  errLinkExpired: "Lyen sa a ekspire oswa yo deja itilize l. Tanpri mande yon lòt.",
+  requestNewLink: "Mande yon nouvo lyen",
 
   modTitle: "Siyalman",
   noReports: "Pa gen siyalman ouvè.",
@@ -389,6 +413,16 @@ const ht: Dict = {
   markClosed: "Fèmen",
   notTeam: "Paj sa a se pou ekip Ekip la.",
   reportedItem: "Sa yo siyale",
+  notificationsTitle: "Notifikasyon",
+  noNotifications: "Poko gen notifikasyon.",
+  newRequestBadge: "Nouvo demann",
+  markAllRead: "Make tout kòm li",
+  myPostsTitle: "Piblikasyon mwen yo",
+  myRequests: "Demann mwen yo",
+  myOffers: "Ofri mwen yo",
+  noMyRequests: "Ou poko pibliye okenn demann.",
+  noMyOffers: "Ou poko pibliye okenn ofri.",
+  openChat: "Louvri chat la",
 };
 
 const fr: Dict = {
@@ -569,6 +603,13 @@ const fr: Dict = {
   savePassword: "Enregistrer le nouveau mot de passe",
   saving: "Enregistrement…",
   authErrorTitle: "Désolé, une erreur s'est produite.",
+  errBadLogin: "E-mail ou mot de passe incorrect.",
+  errNotConfirmed: "Veuillez d'abord confirmer votre e-mail. Consultez votre boîte de réception.",
+  errAlreadyRegistered: "Cet e-mail a déjà un compte. Essayez de vous connecter.",
+  errSamePassword: "Votre nouveau mot de passe doit être différent de l'ancien.",
+  errWeakPassword: "Ce mot de passe est trop faible. Utilisez au moins 6 caractères.",
+  errLinkExpired: "Ce lien a expiré ou a déjà été utilisé. Veuillez en demander un nouveau.",
+  requestNewLink: "Demander un nouveau lien",
 
   modTitle: "Signalements",
   noReports: "Aucun signalement ouvert.",
@@ -576,6 +617,16 @@ const fr: Dict = {
   markClosed: "Clore",
   notTeam: "Cette page est réservée à l'équipe Ekip.",
   reportedItem: "Signalé",
+  notificationsTitle: "Notifications",
+  noNotifications: "Aucune notification pour l'instant.",
+  newRequestBadge: "Nouvelle demande",
+  markAllRead: "Tout marquer comme lu",
+  myPostsTitle: "Mes publications",
+  myRequests: "Mes demandes",
+  myOffers: "Mes offres",
+  noMyRequests: "Vous n'avez pas encore publié de demande.",
+  noMyOffers: "Vous n'avez pas encore publié d'offre.",
+  openChat: "Ouvrir la discussion",
 };
 
 const es: Dict = {
@@ -756,6 +807,13 @@ const es: Dict = {
   savePassword: "Guardar la nueva contraseña",
   saving: "Guardando…",
   authErrorTitle: "Lo sentimos, algo salió mal.",
+  errBadLogin: "Correo o contraseña incorrectos.",
+  errNotConfirmed: "Primero confirma tu correo. Revisa tu bandeja de entrada.",
+  errAlreadyRegistered: "Este correo ya tiene una cuenta. Intenta iniciar sesión.",
+  errSamePassword: "Tu nueva contraseña debe ser distinta de la anterior.",
+  errWeakPassword: "Esa contraseña es muy débil. Usa al menos 6 caracteres.",
+  errLinkExpired: "Este enlace ha caducado o ya se usó. Solicita uno nuevo.",
+  requestNewLink: "Solicitar un nuevo enlace",
 
   modTitle: "Denuncias",
   noReports: "No hay denuncias abiertas.",
@@ -763,6 +821,16 @@ const es: Dict = {
   markClosed: "Cerrar",
   notTeam: "Esta página es para el equipo de Ekip.",
   reportedItem: "Denunciado",
+  notificationsTitle: "Notificaciones",
+  noNotifications: "Aún no hay notificaciones.",
+  newRequestBadge: "Nueva solicitud",
+  markAllRead: "Marcar todo como leído",
+  myPostsTitle: "Mis publicaciones",
+  myRequests: "Mis solicitudes",
+  myOffers: "Mis ofertas",
+  noMyRequests: "Aún no has publicado ninguna solicitud.",
+  noMyOffers: "Aún no has publicado ninguna oferta.",
+  openChat: "Abrir el chat",
 };
 
 export const translations: Record<Lang, Dict> = { en, ht, fr, es };

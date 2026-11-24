@@ -1,5 +1,11 @@
 import Link from "next/link";
+import { Bell } from "lucide-react";
 import { ThemeSwitcher } from "@/components/theme-switcher";
+import {
+  countUnreadNotifications,
+  getUser,
+  isTeamMember,
+} from "@/lib/ekip/queries";
 import { getT } from "@/lib/i18n/server";
 import { LangAttr } from "./lang-attr";
 import { LangSwitch } from "./lang-switch";
@@ -9,6 +15,10 @@ import { TabBar } from "./tab-bar";
 // Header, page area and bottom tabs shared by every Ekip page.
 export async function Shell({ children }: { children: React.ReactNode }) {
   const { lang, t } = await getT();
+  // Ekip team members get a bell that shows new requests.
+  const user = await getUser();
+  const team = user ? await isTeamMember(user.id) : false;
+  const unread = team ? await countUnreadNotifications() : 0;
   return (
     <div className="flex min-h-svh flex-col">
       <LangAttr lang={lang} />
@@ -24,6 +34,20 @@ export async function Shell({ children }: { children: React.ReactNode }) {
             </span>
           </Link>
           <div className="flex items-center gap-2">
+            {team ? (
+              <Link
+                href="/notifications"
+                aria-label={`${t("notificationsTitle")}${unread > 0 ? ` (${unread})` : ""}`}
+                className="relative flex size-9 items-center justify-center rounded-md hover:bg-accent"
+              >
+                <Bell className="size-5" aria-hidden />
+                {unread > 0 ? (
+                  <span className="absolute right-0.5 top-0.5 flex min-w-4 items-center justify-center rounded-full bg-primary px-1 text-[10px] font-bold leading-4 text-primary-foreground">
+                    {unread > 9 ? "9+" : unread}
+                  </span>
+                ) : null}
+              </Link>
+            ) : null}
             <LangSwitch current={lang} />
             <ThemeSwitcher />
           </div>
