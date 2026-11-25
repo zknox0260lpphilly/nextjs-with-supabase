@@ -14,7 +14,7 @@ const COOKIE_OPTIONS = {
 // profile into this device, so they skip the welcome screens.
 export async function GET(request: NextRequest) {
   const user = await getUser();
-  const profile = user ? await getMyProfile(user.id) : null;
+  const profile = user ? (await getMyProfile(user.id)).profile : null;
   const store = await cookies();
 
   if (profile) {

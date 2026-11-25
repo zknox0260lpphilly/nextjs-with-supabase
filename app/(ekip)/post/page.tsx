@@ -2,9 +2,9 @@ import Link from "next/link";
 import { Suspense } from "react";
 import { HandHeart, HeartHandshake } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { ErrorNotice } from "@/components/ekip/error-notice";
 import {
   Field,
-  Notice,
   SelectBox,
   TextArea,
   TextInput,
@@ -78,7 +78,7 @@ async function Post({ searchParams }: { searchParams: Promise<Params> }) {
           action={kind === "need" ? createRequest : createOffer}
           className="mt-6 grid gap-5"
         >
-          {e ? <Notice tone="error">{t("errorGeneric")}</Notice> : null}
+          <ErrorNotice code={e} t={t} />
 
           <Field label={t("fieldCategory")} htmlFor="category">
             <SelectBox id="category" name="category" required defaultValue="">

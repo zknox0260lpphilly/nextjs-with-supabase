@@ -2,6 +2,7 @@ import Link from "next/link";
 import { Suspense } from "react";
 import { ArrowLeft, CheckCircle2, RefreshCw } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { ErrorNotice } from "@/components/ekip/error-notice";
 import { Notice, TextInput } from "@/components/ekip/fields";
 import { PageSkeleton } from "@/components/ekip/page-bits";
 import { PhotoUpload } from "@/components/ekip/photo-upload";
@@ -67,7 +68,7 @@ async function Chat({
         </p>
       </div>
 
-      {e ? <Notice tone="error">{t("errorGeneric")}</Notice> : null}
+      <ErrorNotice code={e} t={t} />
 
       <ul className="grid gap-2" aria-label={t("messagesTitle")}>
         {messages.map((m) => {

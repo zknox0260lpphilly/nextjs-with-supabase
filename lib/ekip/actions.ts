@@ -41,8 +41,21 @@ async function requireUser() {
   return { supabase, userId };
 }
 
-function withError(path: string): string {
-  return `${path}${path.includes("?") ? "&" : "?"}e=1`;
+// Which message to show when the database refuses something:
+//   profile: the person has no profile row yet (foreign key error)
+//   denied:  a security rule said no
+//   db:      the tables are missing
+//   1:       anything else
+function errorCode(error: { code?: string } | null | undefined): string {
+  const code = error?.code;
+  if (code === "23503") return "profile";
+  if (code === "42501") return "denied";
+  if (code === "42P01" || code === "PGRST205" || code === "PGRST200") return "db";
+  return "1";
+}
+
+function withError(path: string, code = "1"): string {
+  return `${path}${path.includes("?") ? "&" : "?"}e=${code}`;
 }
 
 // ---------------------------------------------------------------------
@@ -113,7 +126,7 @@ export async function createRequest(formData: FormData) {
     .insert({ category_id, title, description: description || null, quantity })
     .select("id")
     .single();
-  if (error || !data) redirect(withError("/post?type=need"));
+  if (error || !data) redirect(withError("/post?type=need", errorCode(error)));
 
   revalidatePath("/", "layout");
   redirect(`/requests/${data.id}`);
@@ -130,7 +143,7 @@ export async function createOffer(formData: FormData) {
   const { error } = await supabase
     .from("offers")
     .insert({ category_id, title, description: description || null, quantity });
-  if (error) redirect(withError("/post?type=offer"));
+  if (error) redirect(withError("/post?type=offer", errorCode(error)));
 
   revalidatePath("/", "layout");
   redirect("/explore?type=offers");
@@ -162,17 +175,25 @@ export async function offerHelp(formData: FormData) {
     })
     .select("id")
     .single();
-  if (offerError || !offer) redirect(withError(back));
+  if (offerError || !offer) redirect(withError(back, errorCode(offerError)));
 
-  const { data: match, error: matchError } = await supabase
+  // Do not ask for the new row back in the same step: the database's security
+  // rules cannot see a match that is still being created, so they refuse it.
+  // Create the match, then look it up on its own.
+  const { error: matchError } = await supabase
     .from("matches")
-    .insert({ request_id: request.id, offer_id: offer.id })
-    .select("id")
-    .single();
+    .insert({ request_id: request.id, offer_id: offer.id });
+  const { data: match } = matchError
+    ? { data: null }
+    : await supabase
+        .from("matches")
+        .select("id")
+        .eq("offer_id", offer.id)
+        .maybeSingle();
   if (matchError || !match) {
-    // Someone else matched first: remove the unused offer.
+    // Someone else matched first (or it failed): remove the unused offer.
     await supabase.from("offers").delete().eq("id", offer.id);
-    redirect(withError(back));
+    redirect(withError(back, errorCode(matchError)));
   }
 
   if (note) {
@@ -195,7 +216,7 @@ export async function sendMessage(formData: FormData) {
     const { error } = await supabase
       .from("messages")
       .insert({ match_id: matchId, body });
-    if (error) redirect(withError(`/messages/${matchId}`));
+    if (error) redirect(withError(`/messages/${matchId}`, errorCode(error)));
   }
   revalidatePath(`/messages/${matchId}`);
   redirect(`/messages/${matchId}`);
@@ -209,7 +230,7 @@ export async function confirmReceipt(formData: FormData) {
     .update({ received_confirmed_at: new Date().toISOString() })
     .eq("id", matchId)
     .is("received_confirmed_at", null);
-  if (error) redirect(withError(`/messages/${matchId}`));
+  if (error) redirect(withError(`/messages/${matchId}`, errorCode(error)));
   revalidatePath("/", "layout");
   redirect(`/messages/${matchId}`);
 }
@@ -234,7 +255,7 @@ export async function reportContent(formData: FormData) {
         ? { reported_offer_id: id }
         : { reported_profile_id: id };
   const { error } = await supabase.from("reports").insert({ ...target, reason });
-  if (error) redirect(withError(back));
+  if (error) redirect(withError(back, errorCode(error)));
   redirect(`${back}${back.includes("?") ? "&" : "?"}reported=1`);
 }
 
@@ -264,7 +285,7 @@ export async function updateProfile(formData: FormData) {
   const region = text(formData, "region", 80);
   const city = text(formData, "city", 80);
 
-  const { error } = await supabase
+  const { data: saved, error } = await supabase
     .from("profiles")
     .update({
       display_name: text(formData, "display_name", 60),
@@ -275,8 +296,12 @@ export async function updateProfile(formData: FormData) {
       user_type: userType,
       organization_name: text(formData, "organization_name", 100) || null,
     })
-    .eq("id", userId);
-  if (error) redirect(withError("/profile"));
+    .eq("id", userId)
+    .select("id");
+  // An update that changes nothing means this person has no profile row yet.
+  if (error || !saved?.length) {
+    redirect(withError("/profile", error ? errorCode(error) : "profile"));
+  }
 
   const store = await cookies();
   store.set(LANG_COOKIE, language, COOKIE_OPTIONS);
