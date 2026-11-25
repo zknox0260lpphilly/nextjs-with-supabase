@@ -254,20 +254,25 @@ export type MyProfile = {
   verified_at: string | null;
 };
 
-export async function getMyProfile(userId: string): Promise<MyProfile | null> {
-  if (!hasEnvVars) return null;
+export async function getMyProfile(userId: string): Promise<{
+  profile: MyProfile | null;
+  status: "ok" | "missing" | "error";
+}> {
+  if (!hasEnvVars) return { profile: null, status: "error" };
   try {
     const supabase = await createClient();
-    const { data } = await supabase
+    const { data, error } = await supabase
       .from("profiles")
       .select(
         "display_name,language,country,department,city,user_type,organization_name,verified_at",
       )
       .eq("id", userId)
       .maybeSingle();
-    return (data as MyProfile | null) ?? null;
+    if (error) return { profile: null, status: "error" };
+    if (!data) return { profile: null, status: "missing" };
+    return { profile: data as MyProfile, status: "ok" };
   } catch {
-    return null;
+    return { profile: null, status: "error" };
   }
 }
 

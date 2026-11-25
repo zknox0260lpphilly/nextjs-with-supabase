@@ -2,6 +2,7 @@ import Link from "next/link";
 import { Suspense } from "react";
 import { BadgeCheck, Bell, ClipboardList, ShieldCheck } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { ErrorNotice } from "@/components/ekip/error-notice";
 import {
   Field,
   Notice,
@@ -60,15 +61,20 @@ async function Profile({
     );
   }
 
-  const [profile, team] = await Promise.all([
+  const [{ profile, status }, team] = await Promise.all([
     getMyProfile(user.id),
     isTeamMember(user.id),
   ]);
   if (!profile) {
     return (
-      <div>
+      <div className="grid gap-4">
         <PageTitle>{t("profileTitle")}</PageTitle>
-        <Notice>{t("dbNotReady")}</Notice>
+        <Notice tone={status === "missing" ? "error" : "info"}>
+          {status === "missing" ? t("errNoProfile") : t("dbNotReady")}
+        </Notice>
+        <div>
+          <SignOutButton label={t("signOut")} />
+        </div>
       </div>
     );
   }
@@ -86,7 +92,7 @@ async function Profile({
       <PageTitle>{t("profileTitle")}</PageTitle>
 
       {saved ? <Notice tone="success">{t("saved")}</Notice> : null}
-      {e ? <Notice tone="error">{t("errorGeneric")}</Notice> : null}
+      <ErrorNotice code={e} t={t} />
 
       <div className="flex flex-wrap items-center gap-3 text-sm text-muted-foreground">
         <span>{user.email}</span>

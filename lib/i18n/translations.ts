@@ -198,6 +198,9 @@ const en = {
   errWeakPassword: "That password is too weak. Use at least 6 characters.",
   errLinkExpired: "This link has expired or was already used. Please request a new one.",
   requestNewLink: "Request a new link",
+  errNoProfile:
+    "Your Ekip profile is not set up yet. Please contact the Ekip team.",
+  errDenied: "You are not allowed to do that.",
 
   // moderation
   modTitle: "Reports",
@@ -406,6 +409,9 @@ const ht: Dict = {
   errWeakPassword: "Modpas sa a twò fèb. Itilize omwen 6 karaktè.",
   errLinkExpired: "Lyen sa a ekspire oswa yo deja itilize l. Tanpri mande yon lòt.",
   requestNewLink: "Mande yon nouvo lyen",
+  errNoProfile:
+    "Pwofil Ekip ou poko pare. Tanpri kontakte ekip Ekip la.",
+  errDenied: "Ou pa gen dwa fè sa.",
 
   modTitle: "Siyalman",
   noReports: "Pa gen siyalman ouvè.",
@@ -610,6 +616,9 @@ const fr: Dict = {
   errWeakPassword: "Ce mot de passe est trop faible. Utilisez au moins 6 caractères.",
   errLinkExpired: "Ce lien a expiré ou a déjà été utilisé. Veuillez en demander un nouveau.",
   requestNewLink: "Demander un nouveau lien",
+  errNoProfile:
+    "Votre profil Ekip n'est pas encore configuré. Veuillez contacter l'équipe Ekip.",
+  errDenied: "Vous n'avez pas le droit de faire cela.",
 
   modTitle: "Signalements",
   noReports: "Aucun signalement ouvert.",
@@ -814,6 +823,9 @@ const es: Dict = {
   errWeakPassword: "Esa contraseña es muy débil. Usa al menos 6 caracteres.",
   errLinkExpired: "Este enlace ha caducado o ya se usó. Solicita uno nuevo.",
   requestNewLink: "Solicitar un nuevo enlace",
+  errNoProfile:
+    "Tu perfil de Ekip aún no está configurado. Contacta al equipo de Ekip.",
+  errDenied: "No tienes permiso para hacer eso.",
 
   modTitle: "Denuncias",
   noReports: "No hay denuncias abiertas.",

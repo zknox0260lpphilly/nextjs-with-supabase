@@ -2,6 +2,7 @@ import Link from "next/link";
 import { Suspense } from "react";
 import { ArrowLeft, ShieldAlert } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { ErrorNotice } from "@/components/ekip/error-notice";
 import { Field, Notice, TextArea } from "@/components/ekip/fields";
 import { PageSkeleton } from "@/components/ekip/page-bits";
 import { PostCard } from "@/components/ekip/post-card";
@@ -44,7 +45,7 @@ async function RequestPage({
       ) : (
         <>
           {reported ? <Notice tone="success">{t("reportThanks")}</Notice> : null}
-          {e ? <Notice tone="error">{t("errorGeneric")}</Notice> : null}
+          <ErrorNotice code={e} t={t} />
 
           <PostCard post={row} kind="request" t={t} className="[&_h3]:text-xl" />
 
